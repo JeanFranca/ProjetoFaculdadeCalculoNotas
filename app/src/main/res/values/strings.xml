@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">CalculoNotaB2</string>
+    <string name="TextBaseResultado">Você precisa tirar:</string>
+    <string name="TbxNotaPIM">NotaPIM</string>
+    <string name="TbxNotaP2">Nota NP2</string>
+    <string name="TbxNotaP1">Nota NP1</string>
+    <string name="Descricao">Digite no minimo 2 notas para realizar o calculo:</string>
+    <string name="BtnCalc">Calcular</string>
+    <string name="Titulo">Calculo da NP2</string>
+
+    <string name="Vazio"></string>
+    <string name="notasNecessarias">Digite ao menos 2 notas</string>
+
+    <string name="necessarioNP1">Você precisa tirar na NP1: </string>
+    <string name="necessarioNP2">Você precisa tirar na NP2: </string>
+    <string name="necessarioPIM">Você precisa tirar no PIM: </string>
+
+</resources>
