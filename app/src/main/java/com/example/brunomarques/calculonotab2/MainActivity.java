@@ -1,77 +1,107 @@
 package com.example.brunomarques.calculonotab2;
 
-import android.annotation.SuppressLint;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Notas np1 = new Notas();
-    Notas np2 = new Notas();
-    Notas pim = new Notas();
-    double valorCorteNPs = 0.4;
-    double valorCortePIM = 0.2;
 
-    TextView viewResultadoNota;
-    Double Resultado;
-    String ErrorNotasNecessarias = "Digite no minimo 2 notas";
+
+    private class ViewHolder{
+        EditText editNp1;
+        EditText editNp2;
+        EditText editPim;
+        TextView textResult;
+        TextView textNota;
+        Button btnCalcular;
+    }
+
+
+    ViewHolder mViewHolder = new ViewHolder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        viewResultadoNota = findViewById(R.id.TxtResultado);
-        np1.setEditNota((EditText) findViewById(R.id.NotaNP1));
-        np2.setEditNota((EditText) findViewById(R.id.NotaNP2));
-        pim.setEditNota((EditText) findViewById(R.id.NotaPIM));
-        np1.setValueNota(0.4);
-        np2.setValueNota(0.4);
-        pim.setValueNota(0.2);
-        np1.setResultadoNotaBase("Você precisa tirar na NP1: ");
-        np2.setResultadoNotaBase("Você precisa tirar na NP2: ");
-        pim.setResultadoNotaBase("Você precisa tirar no PIM: ");
+        this.mViewHolder.editNp1 = (EditText) findViewById(R.id.NotaNP1);
+        this.mViewHolder.editNp2 = (EditText) findViewById(R.id.NotaNP2);
+        this.mViewHolder.editPim = (EditText) findViewById(R.id.NotaPIM);
+        this.mViewHolder.textResult = (TextView) findViewById(R.id.TxtResultado);
+        this.mViewHolder.textNota =  (TextView) findViewById(R.id.textNota);
+        this.mViewHolder.btnCalcular = (Button) findViewById(R.id.BtnCalcular);
+
+        this.mViewHolder.btnCalcular.setOnClickListener(this);
+
+
+
     }
 
-    public void testeValores(View v){
-        if(np1.getEditNota().getText().toString().trim().equals("")){
-            testes(np2, pim, np1, valorCorteNPs, valorCortePIM, valorCorteNPs);
-        }else if(np2.getEditNota().getText().toString().trim().equals("")){
-            testes(np1, pim, np2, valorCorteNPs, valorCortePIM, valorCorteNPs);
-        }else if(pim.getEditNota().getText().toString().trim().equals("")){
-            testes(np1, np2, pim, valorCorteNPs, valorCorteNPs, valorCortePIM);
+    public void  calculate(){
+
+        if (this.mViewHolder.editNp1.getText().toString().trim().equals("") &&
+                this.mViewHolder.editNp2.getText().toString().trim().equals("")&&
+                this.mViewHolder.editPim.getText().toString().trim().equals("")) {
+            Toast.makeText(this, "Todos os Campos vazios", Toast.LENGTH_SHORT).show();
+
+        }else if(!this.mViewHolder.editNp1.getText().toString().trim().equals("") &&
+                !this.mViewHolder.editNp2.getText().toString().trim().equals("")&&
+                this.mViewHolder.editPim.getText().toString().trim().equals("")){
+            //calcular o quanto precisa no pim
+            double np1,np2;
+            np2 = Double.valueOf(this.mViewHolder.editNp2.getText().toString());
+            np1 = Double.valueOf(this.mViewHolder.editNp1.getText().toString());
+            this.mViewHolder.textNota.setText("No Pim voçê precissa tirar no minimo:");
+            this.mViewHolder.textResult.setText(String.format("%0.2",(5-((np2*0.4)+(np1*0.4)))/0.2));
+
+        }else if(this.mViewHolder.editNp1.getText().toString().trim().equals("") &&
+                !this.mViewHolder.editNp2.getText().toString().trim().equals("")&&
+                !this.mViewHolder.editPim.getText().toString().trim().equals("")){
+            //calcular o quanto precisa na np1dfd
+            double np2,pim;
+            np2 = Double.valueOf(this.mViewHolder.editNp2.getText().toString());
+            pim = Double.valueOf(this.mViewHolder.editPim.getText().toString());
+            this.mViewHolder.textNota.setText("Na np1 voçê precissa tirar no minimo:");
+            this.mViewHolder.textResult.setText(String.format("%0.2",(5-(pim*0.2)-(np2*0.4))/0.4));
+
+        }else if(!this.mViewHolder.editNp1.getText().toString().trim().equals("") &&
+                this.mViewHolder.editNp2.getText().toString().trim().equals("")&&
+                !this.mViewHolder.editPim.getText().toString().trim().equals("")){
+            //calcular o quanto precisa na np2
+            double np1,pim;
+            np1 = Double.valueOf(this.mViewHolder.editNp1.getText().toString());
+            pim = Double.valueOf(this.mViewHolder.editPim.getText().toString());
+            this.mViewHolder.textNota.setText("Na np2 voçê precissa tirar no minimo:");
+            this.mViewHolder.textResult.setText(String.format("%0.2",(5-(pim*0.2)-(np1*0.4))/0.4));
+
+        }else if(!this.mViewHolder.editNp2.getText().toString().trim().equals("")&&
+                !this.mViewHolder.editNp2.getText().toString().trim().equals("")&&
+                !this.mViewHolder.editPim.getText().toString().trim().equals("")) {
+            //calcular media
+            double np1,np2,pim;
+            np2 = Double.valueOf(this.mViewHolder.editNp2.getText().toString());
+            np1 = Double.valueOf(this.mViewHolder.editNp1.getText().toString());
+            pim = Double.valueOf(this.mViewHolder.editPim.getText().toString());
+            this.mViewHolder.textNota.setText("Sua média será:");
+            this.mViewHolder.textResult.setText(String.format("%0.2",((np1*0.4)+(np2*0.4))+(pim*0.2)));
+        }else{
+            Toast.makeText(this, "coloque mais uma nota", Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if(id == R.id.BtnCalcular){
+            calculate();
+
         }
     }
 
-    public void testes(Notas ValorA, Notas ValorB, Notas ValorC, double valor1, double valor2, double valor3) {
-        if (ValorA.getEditNota().getText().toString().trim().equals("")) {
-            Toast.makeText(this, ErrorNotasNecessarias, Toast.LENGTH_SHORT).show();
-        } else {
-            if (ValorB.getEditNota().getText().toString().trim().equals("")) {
-                Toast.makeText(this, ErrorNotasNecessarias, Toast.LENGTH_SHORT).show();
-            } else {
-                ValorB.setValueNota(Double.valueOf(ValorB.getEditNota().getText().toString()));
-                ValorA.setValueNota(Double.valueOf(ValorA.getEditNota().getText().toString()));
-                Resultado = (5 - (ValorB.getValueNota() * valor1) - (ValorA.getValueNota() * valor2));
-                if(Resultado < 0) {
-                    Resultado = 0.00;
-                }
-                if((Resultado < 1) && (ValorC == pim)) {
-                    Resultado = 1.00;
-                }
-                if((Resultado > 2) && (ValorC == pim)) {
-                    viewResultadoNota.setText("Pegará DP pois você precisa de: " + String.format("%.2f", Resultado) + " no pim");
-                }else if((Resultado > 10) && (ValorC == np1)){
-                    viewResultadoNota.setText("Pegará DP pois você precisa de :" + String.format("%.2f", Resultado) + " na NP1");
-                }else if((Resultado > 10) && (ValorC == np2)){
-                    viewResultadoNota.setText("Pegará DP pois você precisa de :" + String.format("%.2f", Resultado) + " na NP2");
-                }else{
-                    viewResultadoNota.setText(ValorC.getResultadoNotaBase().toString() + String.format("%.2f", Resultado));
-                }
-            }
-        }
-    }
 }
